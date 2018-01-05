@@ -15,7 +15,7 @@ jobs:
             source ci/prepare.sh
             docker info
             docker_tag_push $CI_BUILD_SHA circleci-test prod
-            docker_cloud service redeploy --sync cloud.docker.com
+            docker_cloud zcong circleci-test latest
 workflows:
   version: 2
   build-n-deploy:
