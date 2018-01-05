@@ -25,5 +25,5 @@ docker_tag_push() {
 	echo Tagging docker image...
 	docker tag $CIRCLE_PROJECT_REPONAME:$1 $2:$3
 
-	echo ${$CIRCLE_PROJECT_REPONAME} "$2$3"
+	echo ${CIRCLE_PROJECT_REPONAME} "$2$3"
 }
