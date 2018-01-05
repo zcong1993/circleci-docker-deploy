@@ -1,5 +1,13 @@
 version: 2.0
 
+references:
+  docker_config: &docker_config
+    machine: true
+    steps:
+      - checkout
+      - restore_cache:
+          key: $CIRCLE_SHA1
+
 jobs:
   build:
     machine: true
@@ -32,9 +40,9 @@ jobs:
             docker_push zcong circleci-test production
 
   staging:
-    <<: *deploy
+    <<: *docker_config
     - run:
-        name: push to production
+        name: push to staging
         command: |
           source ci/prepare.sh
           docker info
