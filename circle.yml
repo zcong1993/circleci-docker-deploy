@@ -16,8 +16,8 @@ jobs:
       - run:
           name: build
           command: |
-            - docker info
-            - docker_tag_push $CI_BUILD_SHA circleci-test prod
+            docker info
+            docker_tag_push $CI_BUILD_SHA circleci-test prod
 
 workflows:
   version: 2
