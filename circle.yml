@@ -2,26 +2,45 @@ version: 2.0
 
 jobs:
   build:
-    # docker:
-    #   # CircleCI Go images available at: https://hub.docker.com/r/circleci/golang/
-    #   - image: docker:dind
     machine: true
-
     steps:
       - checkout
       - run:
           name: build
           command: |
             source ci/prepare.sh
-            docker info
             docker_build
-            docker_cloud zcong circleci-test prod
+            mkdir -p docker-cache
+            docker save -o docker-cache/built-image.tar $CIRCLE_PROJECT_REPONAME:$CI_BUILD_SHA
+      - save_cache:
+          key: $CIRCLE_SHA1
+          paths:
+            - docker-cache
+  deploy:
+    machine: true
+    steps:
+      - checkout
+      - restore_cache:
+          key: $CIRCLE_SHA1
+      - run:
+          name: push
+          command: |
+            source ci/prepare.sh
+            docker info
+            docker load < docker-cache/built-image.tar
+            docker_push zcong circleci-test prod
 workflows:
   version: 2
   build-n-deploy:
     jobs:
       - build:
+          filters:
+            tags:
+              only: /^v.*/
+      - deploy:
           context: org-global
+          requires:
+            - build
           filters:
             tags:
               only: /^v.*/
