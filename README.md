@@ -1,9 +1,12 @@
-# circleci-test
-<!--
-[![Go Report Card](https://goreportcard.com/badge/github.com/zcong1993/circleci-test)](https://goreportcard.com/report/github.com/zcong1993/circleci-test)
--->
+# circleci-docker-deploy
 
-> my go project
+> circleci workflow auto build and deploy docker image, Only use for Autobuild is not available
+
+## Settings
+
+Set `DOCKERCLOUD_USER` and `DOCKERCLOUD_APIKEY` to `Circleci Settings Contexts`.
+
+Replace `docker_push zcong/circleci-test:production` to your image in `cloud.docker.com`
 
 ## License
 

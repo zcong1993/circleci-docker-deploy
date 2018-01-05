@@ -35,7 +35,7 @@ jobs:
             source ci/prepare.sh
             docker info
             docker load < docker_cache/docker_built.tar
-            docker_push zcong circleci-test production
+            docker_push zcong/circleci-test:production
 
   staging:
     machine: true
@@ -49,7 +49,7 @@ jobs:
             source ci/prepare.sh
             docker info
             docker load < docker_cache/docker_built.tar
-            docker_push zcong circleci-test staging
+            docker_push zcong/circleci-test:staging
 
 workflows:
   version: 2

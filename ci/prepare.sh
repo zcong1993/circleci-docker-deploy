@@ -14,9 +14,9 @@ docker() {
 # push to docker cloud
 docker_push() {
 	echo Tag image...
-	docker tag $CIRCLE_PROJECT_REPONAME:$CI_BUILD_SHA $1/$2:$3
+	docker tag $CIRCLE_PROJECT_REPONAME:$CI_BUILD_SHA $1
 	echo Push to docker cloud...
-	docker push $1/$2:$3
+	docker push $1
 }
 
 # build image
