@@ -14,7 +14,7 @@ jobs:
           command: |
             source ci/prepare.sh
             docker info
-            docker_tag_push $CI_BUILD_SHA circleci-test prod
+            docker_build
             docker_cloud zcong circleci-test prod
 workflows:
   version: 2
