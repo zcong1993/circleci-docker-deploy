@@ -10,7 +10,7 @@ docker() {
 docker_cloud() {
 	if ! which docker-cloud >/dev/null 2>/dev/null; then
 		# Install Docker Cloud
-		apk --update add python py-pip >/dev/null
+		apt-get install python py-pip >/dev/null
 		pip install docker-cloud >/dev/null
 	fi
 
