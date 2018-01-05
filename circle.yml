@@ -5,13 +5,27 @@ jobs:
     machine: true
     steps:
       - run: echo no test
+  build:
+    machine: true
+    steps:
+      - checkout
+      - restore_cache:
+          key: ${CIRCLE_WORKFLOW_ID}
+      - run:
+          name: build
+          command: |
+            source ci/prepare.sh
+            docker info
+            docker_build
+            mkdir -p docker_cache
+            docker save -o docker_cache/docker_built.tar $CIRCLE_PROJECT_REPONAME:$CI_BUILD_SHA
 
   deploy:
     machine: true
     steps:
       - checkout
       - restore_cache:
-          key: $CIRCLE_SHA1
+          key: ${CIRCLE_WORKFLOW_ID}
       - run:
           name: push to production
           command: |
@@ -25,7 +39,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: $CIRCLE_SHA1
+          key: ${CIRCLE_WORKFLOW_ID}
       - run:
           name: push to staging
           command: |
@@ -43,17 +57,24 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - staging:
+      - build:
           context: org-global
           requires:
             - test
+          filters:
+            tags:
+              only: /.*/
+      - staging:
+          context: org-global
+          requires:
+            - build
           filters:
             tags:
               ignore: /^v.*/
       - deploy:
           context: org-global
           requires:
-            - test
+            - build
           filters:
             tags:
               only: /^v.*/

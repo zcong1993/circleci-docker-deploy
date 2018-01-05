@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export CI_BUILD_SHA="x${CIRCLE_SHA1:0:8}"
+export CI_BUILD_SHA="x${CIRCLE_WORKFLOW_ID:0:8}"
 
 # auto login
 docker() {
