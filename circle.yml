@@ -1,22 +1,10 @@
 version: 2.0
 
 jobs:
-  build:
+  test:
     machine: true
     steps:
-      - checkout
-      - run:
-          name: build
-          command: |
-            source ci/prepare.sh
-            docker info
-            docker_build
-            mkdir -p docker-cache
-            docker save -o docker-cache/built-image.tar $CIRCLE_PROJECT_REPONAME:$CI_BUILD_SHA
-      - save_cache:
-          key: $CIRCLE_SHA1
-          paths:
-            - docker-cache
+      - run: echo no test
 
   deploy:
     machine: true
@@ -29,7 +17,7 @@ jobs:
           command: |
             source ci/prepare.sh
             docker info
-            docker load < docker-cache/built-image.tar
+            docker_build
             docker_push zcong circleci-test production
 
   staging:
@@ -43,7 +31,7 @@ jobs:
           command: |
             source ci/prepare.sh
             docker info
-            docker load < docker-cache/built-image.tar
+            docker_build
             docker_push zcong circleci-test staging
 
 
@@ -51,22 +39,21 @@ workflows:
   version: 2
   build-n-deploy:
     jobs:
-      - build:
-          context: org-global
+      - test:
           filters:
             tags:
-              only: /^v.*/
+              only: /.*/
       - staging:
           context: org-global
           requires:
-            - build
+            - test
           filters:
             tags:
               ignore: /^v.*/
       - deploy:
           context: org-global
           requires:
-            - build
+            - test
           filters:
             tags:
               only: /^v.*/
