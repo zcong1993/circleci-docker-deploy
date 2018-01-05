@@ -6,7 +6,7 @@
 
 Set `DOCKERCLOUD_USER` and `DOCKERCLOUD_APIKEY` to `Circleci Settings Contexts`.
 
-Replace `docker_push zcong/circleci-test:production` to your image in `cloud.docker.com`
+Replace `docker_push zcong/circleci-docker-deploy:production` to your image in `cloud.docker.com`
 
 ## License
 
