@@ -21,6 +21,7 @@ workflows:
   build-n-deploy:
     jobs:
       - build:
+          context: org-global
           filters:
             tags:
               only: /^v.*/
