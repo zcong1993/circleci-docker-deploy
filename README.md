@@ -8,7 +8,7 @@
 
 ## Settings
 
-Set `DOCKERCLOUD_USER` and `DOCKERCLOUD_APIKEY` to `Circleci Settings Contexts`.
+Set `DOCKERCLOUD_USER` and `DOCKERCLOUD_APIKEY` to `Circleci Project Environment Variables`.
 
 Replace `docker_push zcong/circleci-docker-deploy:production` to your image in `cloud.docker.com`
 
