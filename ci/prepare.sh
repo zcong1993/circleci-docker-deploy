@@ -19,17 +19,13 @@ docker_cloud() {
 	# fi
 
 	# command docker-cloud "$@"
-	echo Push to docker cloud
+	echo Tag image...
+	docker tag $CIRCLE_PROJECT_REPONAME:$CI_BUILD_SHA $1/$2:$3
+	echo Push to docker cloud...
 	docker push $1/$2:$3
 }
 
-docker_tag_push() {
+docker_build() {
 	echo Build image...
-
-	docker build -t $CIRCLE_PROJECT_REPONAME:$1 .
-
-	echo Tagging docker image...
-	docker tag $CIRCLE_PROJECT_REPONAME:$1 $2:$3
-
-	echo ${CIRCLE_PROJECT_REPONAME} "$2:$3"
+	docker build -t $CIRCLE_PROJECT_REPONAME:$CI_BUILD_SHA .
 }
