@@ -1,13 +1,5 @@
 version: 2.0
 
-references:
-  docker_config: &docker_config
-    machine: true
-    steps:
-      - checkout
-      - restore_cache:
-          key: $CIRCLE_SHA1
-
 jobs:
   build:
     machine: true
@@ -25,7 +17,8 @@ jobs:
           key: $CIRCLE_SHA1
           paths:
             - docker-cache
-  deploy: &deploy
+
+  deploy:
     machine: true
     steps:
       - checkout
@@ -40,14 +33,18 @@ jobs:
             docker_push zcong circleci-test production
 
   staging:
-    <<: *docker_config
-    - run:
-        name: push to staging
-        command: |
-          source ci/prepare.sh
-          docker info
-          docker load < docker-cache/built-image.tar
-          docker_push zcong circleci-test staging
+    machine: true
+    steps:
+      - checkout
+      - restore_cache:
+          key: $CIRCLE_SHA1
+      - run:
+          name: push to staging
+          command: |
+            source ci/prepare.sh
+            docker info
+            docker load < docker-cache/built-image.tar
+            docker_push zcong circleci-test staging
 
 
 workflows:
@@ -75,10 +72,3 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-      # - release:
-      #     context: org-global
-      #     filters:
-      #       tags:
-      #         only: /^v.*/
-      #       branches:
-      #         ignore: /.*/
