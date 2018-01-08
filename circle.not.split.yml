@@ -1,0 +1,60 @@
+version: 2.0
+
+jobs:
+  test:
+    machine: true
+    steps:
+      - run: echo no test
+
+  deploy:
+    machine: true
+    steps:
+      - checkout
+      - restore_cache:
+          key: docker-build-cache-{{ .Branch }}-{{ .Revision }}
+      - run:
+          name: push to production
+          command: |
+            source ci/prepare.sh
+            docker info
+            docker_build
+            docker_push zcong/circleci-docker-deploy:production
+
+  staging:
+    machine: true
+    steps:
+      - checkout
+      - restore_cache:
+          key: docker-build-cache-{{ .Branch }}-{{ .Revision }}
+      - run:
+          name: push to staging
+          command: |
+            source ci/prepare.sh
+            docker info
+            docker_build
+            docker_push zcong/circleci-docker-deploy:staging
+
+workflows:
+  version: 2
+  build-n-deploy:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.*/
+      - staging:
+          context: org-global
+          requires:
+            - test
+          filters:
+            tags:
+              ignore: /^v.*/
+      - deploy:
+          context: org-global
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
