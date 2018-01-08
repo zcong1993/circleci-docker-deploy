@@ -1,6 +1,6 @@
 # circleci-docker-deploy
 
-> circleci workflow auto build and deploy docker image, case docker cloud auto build is very very slow...
+> circleci workflow auto build and deploy docker image, because docker cloud auto build is very very slow...
 
 [![CircleCI](https://circleci.com/gh/zcong1993/circleci-docker-deploy/tree/master.svg?style=svg)](https://circleci.com/gh/zcong1993/circleci-docker-deploy/tree/master)
 
